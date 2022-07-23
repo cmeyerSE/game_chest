@@ -1,37 +1,41 @@
 class UsersController < ApplicationController
 
-  # GET: /users
-  get "/users" do
-    erb :"/users/index.html"
+  get "/users/signup" do
+    erb :'users/signup'
   end
 
-  # GET: /users/new
-  get "/users/new" do
-    erb :"/users/new.html"
+  post "/users/signup" do
+    if params[:username] == "" || params[:password] == ""
+      redirect to '/signup'
+    else
+      @user = User.new(:username => params[:username], :password => params[:password])
+      @user.save
+      session[:user_id] = @user.id
+      redirect to '/games'
+    end
   end
 
-  # POST: /users
-  post "/users" do
-    redirect "/users"
+  get '/users/login' do
+    if !logged_in?
+      erb :'users/login'
+    else
+      redirect to '/games'
+    end
   end
 
-  # GET: /users/5
-  get "/users/:id" do
-    erb :"/users/show.html"
+  post '/users/login' do
+    if params[:username] == "" || params[:password] == ""
+      redirect to '/users/signup'
+    else
+      @user = User.create(:username => params[:username], :password_digest => params[:password_digest])
+      session[:user_id] = @user.id
+      redirect '/games'
+    end
   end
 
-  # GET: /users/5/edit
-  get "/users/:id/edit" do
-    erb :"/users/edit.html"
-  end
+  get '/logout' do
+    session.destroy
+    redirect to 'users/signin'
+end
 
-  # PATCH: /users/5
-  patch "/users/:id" do
-    redirect "/users/:id"
-  end
-
-  # DELETE: /users/5/delete
-  delete "/users/:id/delete" do
-    redirect "/users"
-  end
 end

@@ -1,0 +1,8 @@
+<h1> Welcome to your Game Chest, <%= current_user.username %>! </h1>
+
+<h3>Games</h3>
+<% @games.each do |game| %>
+    <ul>
+    <li><%= game.game_title %></li><br />
+    </ul>
+<% end %>
