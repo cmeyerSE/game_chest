@@ -14,13 +14,56 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
 
+  get '/signup' do
+    if !session[:user_id]
+      erb :signup
+    else
+      redirect to '/account'
+    end
+  end
+
+  post '/signup' do
+    if params[:username] == "" || params[:password] == ""
+      redirect to '/signup'
+    else
+      @user = User.create(:username => params[:username], :password => params[:password])
+      session[:user_id] = @user.id
+      redirect '/login'
+    end
+  end
+
+  get '/login' do
+    @error_message = params[:error]
+    if !session[:user_id]
+      erb :'users/login'
+    else
+      redirect '/games'
+    end
+  end
+
+  post '/login' do
+    @user = User.create(:username => params[:username], :password => params[:password])
+    if @user && @user.authenticate(params[:password])
+      session[:user_id] = @user.id
+      redirect '/games'
+    else
+      redirect to '/signup'
+    end
+  end
+
   helpers do
+    def redirect_if_not_logged_in
+      if !logged_in?
+        redirect "/login?error=You have to be logged in to do that"
+      end
+    end
+
     def logged_in?
-      !!current_user
+      !!session[:user_id]
     end
 
     def current_user
-      @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+      User.find(session[:user_id])
     end
   end
 
