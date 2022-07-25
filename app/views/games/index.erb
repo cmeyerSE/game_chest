@@ -1,11 +1,12 @@
 <h1> Welcome to your Game Chest, <%= current_user.username %>! </h1>
 
 <h3>Games</h3>
-
+<ul>
 <% @games.each do |game| %>
-    <%= game.game_title %> </br>
-    <a href="/games/<%=game.id%>/edit">Edit</a>
-    <% end %>
-
+    <li><%= game.game_title %>
+    <a href="/games/<%=game.id%>/edit">Edit</a></li>
+<% end %>
+</ul>
+<br>
 <p> <a href="games/new">Add a new Videogame</a>
 

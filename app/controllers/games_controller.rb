@@ -10,6 +10,10 @@ class GamesController < ApplicationController
     
   end
 
+  get '/games/index' do
+    erb :'games/index'
+  end
+
   get '/games/new' do
     erb :'games/new'
   end
@@ -19,4 +23,13 @@ class GamesController < ApplicationController
     @games.save
     erb :'/games/index'
   end
+
+  get '/games/:id/edit' do
+    erb :'games/edit'
+  end
+
+  post '/games/@game.id' do
+    erb :'games/index'
+  end
+
 end

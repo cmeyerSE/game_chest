@@ -35,7 +35,7 @@ class ApplicationController < Sinatra::Base
   get '/login' do
     @error_message = params[:error]
     if !session[:user_id]
-      erb :'users/login'
+      erb :login
     else
       redirect '/games'
     end
