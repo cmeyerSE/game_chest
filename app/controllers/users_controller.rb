@@ -8,19 +8,15 @@ class UsersController < ApplicationController
   post '/users/:id'
     @user = User.create(params[:id])
     if !@user.nil? && @user == current_user
-      erb :users/show
+      erb :index
     else
       redirect '/games'
     end
   end
 
   get '/logout' do
-    if session[:user_id] != nil
-      session.destroy
-      redirect to '/login'
-    else
-      redirect to '/'
-    end
+    session.clear
+    redirect '/'
   end
 
 end

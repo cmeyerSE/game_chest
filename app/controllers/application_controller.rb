@@ -18,7 +18,7 @@ class ApplicationController < Sinatra::Base
     if !session[:user_id]
       erb :signup
     else
-      redirect to '/account'
+      redirect to '/games'
     end
   end
 
@@ -26,7 +26,8 @@ class ApplicationController < Sinatra::Base
     if params[:username] == "" || params[:password] == ""
       redirect to '/signup'
     else
-      @user = User.create(:username => params[:username], :password => params[:password])
+      @user = User.new(username: params["username"], password: params["password"])
+      @user.save
       session[:user_id] = @user.id
       redirect '/login'
     end
@@ -63,7 +64,7 @@ class ApplicationController < Sinatra::Base
     end
 
     def current_user
-      User.find(session[:user_id])
+      @user = User.find(session[:user_id])
     end
   end
 
