@@ -11,7 +11,7 @@ class GamesController < ApplicationController
   end
 
   get '/games/index' do
-    erb :'games/index'
+    erb :games/index
   end
 
   get '/games/new' do
@@ -19,7 +19,7 @@ class GamesController < ApplicationController
   end
 
   post '/games/new' do
-    @games = Game.new(:game_title => params[:game_title])
+    @games = Game.new(game_title: params[:game_title])
     @games.save
     redirect to '/games/index'
   end
