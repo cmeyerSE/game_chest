@@ -2,7 +2,6 @@ User.destroy_all
 
 (1..3).each do |id|
     User.create!(
-        user_id: id,
         username: Faker::Name.name,
         password_digest: "password",
         )
