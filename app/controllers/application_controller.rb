@@ -23,48 +23,41 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/signup' do
-    if params[:username] == "" || params[:password] == ""
-      redirect to '/signup'
+    user = User.new(:username => params[:username], :password => params[:password])
+
+    if user.save
+      redirect "/login"
     else
-      @user = User.new(username: params["username"], password: params["password"])
-      @user.save
-      session[:user_id] = @user.id
-      redirect '/login'
+      redirect "/failure"
     end
   end
 
   get '/login' do
-    @error_message = params[:error]
-    if !session[:user_id]
-      erb :login
-    else
-      redirect '/games'
-    end
+    erb :login
   end
 
   post '/login' do
-    @user = User.find_by(username: params[:username], password_digest: params[:password_digest])
-    if @user && @user.authenticate(params[:password_digest])
-      session[:user_id] = @user.id
-      redirect '/games'
+    user = User.find_by(:username => params[:username])
+
+    if user && user.authenticate(params[:password])
+      session[:user_id] = user.id
+      redirect "/games"
     else
-      redirect to '/signup'
+      redirect "/failure"
     end
   end
 
-  helpers do
-    def redirect_if_not_logged_in
-      if !logged_in?
-        redirect "/login?error=You have to be logged in to do that"
-      end
-    end
+  get '/failure' do
+    erb :failure
+  end
 
+  helpers do
     def logged_in?
       !!session[:user_id]
     end
 
     def current_user
-      @user = User.find(session[:user_id])
+      User.find(session[:user_id])
     end
   end
 

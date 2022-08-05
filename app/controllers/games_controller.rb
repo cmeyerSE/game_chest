@@ -1,7 +1,6 @@
 class GamesController < ApplicationController
 
   get '/games' do
-    redirect_if_not_logged_in
     @games = current_user.games
     erb :'games/index'
   end
@@ -19,7 +18,7 @@ class GamesController < ApplicationController
   end
 
   post '/games/new' do
-    @games = Game.new(game_title: params[:game_title])
+    @games = Game.create(game_title: params[:game_title], user_id: params[:user_id])
     @games.save
     redirect to '/games'
   end
@@ -29,7 +28,7 @@ class GamesController < ApplicationController
   end
 
   post '/games/edit' do
-    @games = Game.new(game_title: params[:game_title])
+    @games = Game.create(game_title: params[:game_title], user_id: params[:user_id])
     @games.save
     redirect to '/games'
   end
