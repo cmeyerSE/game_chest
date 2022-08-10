@@ -28,8 +28,10 @@ class GamesController < ApplicationController
     erb :'games/edit'
   end
 
-  post '/games/edit' do
-    @games = current_user.games.update(game_title: params[:game_title])
+  post '/games/:id' do
+    @games = Game.find_by_id(params[:id])
+    @games.update(game_title: params[:game_title])
+    @games.save
     redirect to '/games'
   end
 
