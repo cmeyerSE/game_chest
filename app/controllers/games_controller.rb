@@ -18,18 +18,18 @@ class GamesController < ApplicationController
   end
 
   post '/games/new' do
-    @games = Game.create(game_title: params[:game_title], user_id: params[:user_id])
+    @games = current_user.games.build(game_title: params[:game_title], user_id: params[:user_id])
     @games.save
     redirect to '/games'
   end
-
+  
   get '/games/:id/edit' do
+    @games = Game.find_by_id(params[:id])
     erb :'games/edit'
   end
 
   post '/games/edit' do
-    @games = Game.create(game_title: params[:game_title], user_id: params[:user_id])
-    @games.save
+    @games = current_user.games.update(game_title: params[:game_title])
     redirect to '/games'
   end
 
