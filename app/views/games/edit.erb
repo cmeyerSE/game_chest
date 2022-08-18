@@ -5,3 +5,7 @@
     <input type="text" name="game_title" placeholder="New Title">
     <input class="button button1" type="submit" value="Update">
 </form>
+
+<form action="/games/<%= @games.id %>/remove" method="POST">
+    <input class="button button1" type="submit" value="Remove">
+</form>

@@ -35,4 +35,10 @@ class GamesController < ApplicationController
     redirect to '/games'
   end
 
+  post '/games/:id/remove' do
+    @games = Game.find_by_id(params[:id])
+    @games.destroy
+    redirect to '/games'
+  end
+
 end
