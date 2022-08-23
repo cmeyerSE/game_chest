@@ -2,10 +2,12 @@
 <br>
 <br>
 <form action="/games/<%= @games.id %>" method="POST">
+    <input id="hidden" type="hidden" name="_method" value="patch">
     <input type="text" name="game_title" placeholder="New Title">
     <input class="button button1" type="submit" value="Update">
 </form>
 <br>
 <form action="/games/<%= @games.id %>/remove" method="POST">
+    <input id="hidden" type="hidden" name="_method" value="delete">
     <input class="button button1" type="submit" value="Remove">
 </form>

@@ -18,7 +18,7 @@ class GamesController < ApplicationController
   end
 
   post '/games/new' do
-    @games = current_user.games.build(game_title: params[:game_title], user_id: params[:user_id])
+    @games = current_user.games.build(game_title: params[:game_title])
     @games.save
     redirect to '/games'
   end
@@ -28,14 +28,13 @@ class GamesController < ApplicationController
     erb :'games/edit'
   end
 
-  post '/games/:id' do
+  patch '/games/:id' do
     @games = Game.find_by_id(params[:id])
     @games.update(game_title: params[:game_title])
-    @games.save
     redirect to '/games'
   end
 
-  post '/games/:id/remove' do
+  delete '/games/:id/remove' do
     @games = Game.find_by_id(params[:id])
     @games.destroy
     redirect to '/games'
