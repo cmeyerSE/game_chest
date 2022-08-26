@@ -7,7 +7,7 @@
     <input class="button button1" type="submit" value="Update">
 </form>
 <br>
-<form action="/games/<%= @games.id %>/remove" method="POST">
+<form action="/games/<%= @games.id %>/delete" method="POST">
     <input id="hidden" type="hidden" name="_method" value="delete">
     <input class="button button1" type="submit" value="Remove">
 </form>

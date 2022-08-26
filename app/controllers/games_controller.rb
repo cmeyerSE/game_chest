@@ -1,26 +1,50 @@
 class GamesController < ApplicationController
 
   get '/games' do
-    @games = current_user.games
-    erb :'games/index'
+    if logged_in?
+      @games = current_user.games
+      erb :'games/index'
+    else
+      redirect to '/login'
+    end
   end
 
   post '/games' do
-    redirect to "/games"
+    if logged_in?
+      redirect to "/games"
+    else
+      redirect to '/login'
+    end
   end
 
   get '/games/index' do
-    redirect to '/games'
+    if logged_in?
+      redirect to '/games'
+    else
+      redirect to '/login'
+    end
   end
 
   get '/games/new' do
-    erb :'games/new'
+    if logged_in?
+      erb :'games/new'
+    else
+      redirect to '/login'
+    end
   end
 
   post '/games/new' do
-    @games = current_user.games.build(game_title: params[:game_title])
-    @games.save
-    redirect to '/games'
+    if logged_in?
+      if params[:game_title] == ""
+        redirect to "/games/new"
+      else
+        @games = current_user.games.build(game_title: params[:game_title])
+        @games.save
+        redirect to '/games'
+      end
+    else
+      redirect to '/login'
+    end
   end
   
   get '/games/:id/edit' do
@@ -38,12 +62,16 @@ class GamesController < ApplicationController
 
   patch '/games/:id' do
     if logged_in?
-      @games = Game.find_by_id(params[:id])
-      if @games && @games.user == current_user
-        @games.update(game_title: params[:game_title])
-        redirect to '/games'
+      if params[:game_title] == ""
+        redirect to "/games/#{params[:id]}/edit"
       else
-        redirect to '/failure'
+        @games = Game.find_by_id(params[:id])
+        if @games && @games.user == current_user
+          @games.update(game_title: params[:game_title])
+          redirect to '/games'
+        else
+          redirect to '/failure'
+        end
       end
     else
       redirect to '/login'
@@ -54,7 +82,7 @@ class GamesController < ApplicationController
     if logged_in?
       @games = Game.find_by_id(params[:id])
       if @games && @games.user == current_user
-        @games.destroy
+        @games.delete
         redirect to '/games'
       else
         redirect to '/failure'
