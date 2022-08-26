@@ -24,20 +24,44 @@ class GamesController < ApplicationController
   end
   
   get '/games/:id/edit' do
-    @games = Game.find_by_id(params[:id])
-    erb :'games/edit'
+    if logged_in?
+      @games = Game.find_by_id(params[:id])
+      if @games && @games.user = current_user
+        erb :'games/edit'
+      else
+        redirect to '/login'
+      end
+    else
+      redirect to '/login'
+    end
   end
 
   patch '/games/:id' do
-    @games = Game.find_by_id(params[:id])
-    @games.update(game_title: params[:game_title])
-    redirect to '/games'
+    if logged_in?
+      @games = Game.find_by_id(params[:id])
+      if @games && @games.user = current_user
+        @games.update(game_title: params[:game_title])
+        redirect to '/games'
+      else
+        redirect to '/login'
+      end
+    else
+      redirect to '/login'
+    end
   end
 
-  delete '/games/:id/remove' do
-    @games = Game.find_by_id(params[:id])
-    @games.destroy
-    redirect to '/games'
+  delete '/games/:id/delete' do
+    if logged_in?
+      @games = Game.find_by_id(params[:id])
+      if @games && @games.user = current_user
+        @games.destroy
+        redirect to '/games'
+      else
+        redirect to '/login'
+      end
+    else
+      redirect to '/login'
+    end
   end
 
 end
